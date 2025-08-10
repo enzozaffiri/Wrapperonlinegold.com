@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Wrapper Online Gold - Mobile Friendly</title>
+<style>
+  body {
+    background: #2f2f2f;
+    color: #e6d59a;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0; padding: 1rem;
+  }
+  header {
+    font-size: 1.8rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  #characters {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+  .char-card {
+    background: #555;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 0 8px #d4af37cc;
+    user-select: none;
+  }
+  .char-card.selected {
+    box-shadow: 0 0 15px #fff;
+    transform: scale(1.1);
+  }
+  .char-avatar {
+    font-size: 3rem;
+  }
+  textarea {
+    width: 100%;
+    height: 80px;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    padding: 0.5rem;
+    border: 1px solid #d4af37;
+    background: #2f2f2f;
+    color: #e6d59a;
+  }
+  button {
+    background: #d4af37;
+    border: none;
+    padding: 0.7rem 1rem;
+    font-weight: bold;
+    color: #222;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 0 8px #b8860b;
+    width: 100%;
+    font-size: 1.1rem;
+  }
+  button:disabled {
+    background: #888;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+</style>
+</head>
+<body>
+
+<header>Wrapper Online Gold - Mobile Friendly</header>
+
+<div id="characters"></div>
+
+<textarea id="textInput" placeholder="Type your dialogue here..."></textarea>
+
+<button id="speakBtn">Speak</button>
+
+<script>
+  const characters = [
+    { id: 'boston_buckler', name: 'Boston Buckler', avatar: '🛡️', color: '#cfc84e' },
+    { id: 'goanimate1', name: 'GoAnimate 1', avatar: '😎', color: '#e1a23c' },
+    { id: 'goanimate2', name: 'GoAnimate 2', avatar: '👩‍🎤', color: '#e1a23c' },
+  ];
+
+  const charsDiv = document.getElementById('characters');
+  const textInput = document.getElementById('textInput');
+  const speakBtn = document.getElementById('speakBtn');
+
+  let selectedChar = characters[0];
+
+  function renderCharacters() {
+    charsDiv.innerHTML = '';
+    characters.forEach(c => {
+      const card = document.createElement('div');
+      card.className = 'char-card' + (c.id === selectedChar.id ? ' selected' : '');
+      card.style.border = `2px solid ${c.color}`;
+      card.innerHTML = `<div class="char-avatar">${c.avatar}</div><div>${c.name}</div>`;
+      card.onclick = () => {
+        selectedChar = c;
+        renderCharacters();
+      };
+      charsDiv.appendChild(card);
+    });
+  }
+
+  speakBtn.onclick = () => {
+    const text = textInput.value.trim();
+    if (!text) {
+      alert('Please type something!');
+      return;
+    }
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-US';
+    utterance.voice = speechSynthesis.getVoices().find(v => v.lang === 'en-US') || null;
+    speechSynthesis.speak(utterance);
+  };
+
+  renderCharacters();
+</script>
+
+</body>
+</html>
